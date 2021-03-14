@@ -5,7 +5,7 @@
  * Instituto Tecnológico de Costa Rica
  * Estructuras de Datos
  * Profesor: Aurelio Sanabria
- * Estudiante: Adrian Araya Morera
+ * Estudiante: Adrián Araya Morera
  * Tarea Corta 1
  * 
  * Para compilar se utilizó gcc -g ejercicios1.c -o ejercicios1
