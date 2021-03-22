@@ -43,7 +43,7 @@ void addJupa(ListaSimple *lista, void *data) {
 void addCola(ListaSimple *lista, void *data){
 	Nodo *nodo = (Nodo*) malloc(sizeof(Nodo));
 	nodo->data = data;
-	if (lista-jupa == NULL) { //Si la lista esta vacia, jupa sera NULL
+	if (lista->jupa == NULL) { //Si la lista esta vacia, jupa sera NULL
 		lista->jupa = nodo; //Si esta vacia el nuevo nodo sera la jupa
 	} else {
 		lista-> cola-> sigt = nodo; //Si no esta vacia se agrega al final
@@ -56,7 +56,7 @@ void eliminaNodo(ListaSimple *lista, Nodo *nodo){
 		if (lista-> jupa-> sigt == NULL) { //Si el primer nodo es el unico
 			lista-> jupa = lista-> cola = NULL; //Reasiga a NULL los nodos de la lista
 		} else { //Si el nodo no es unico
-			lista-> jupa = lsita-> jupa-> sigt; //se asigna el 1er al sigt nodo en lista
+			lista-> jupa = lista-> jupa-> sigt; //se asigna el 1er al sigt nodo en lista
 		}
 	} else { //Se recorre la lista
 		Nodo *temp = lista-> jupa; //Usando un puntero temporal
@@ -73,4 +73,26 @@ void eliminaNodo(ListaSimple *lista, Nodo *nodo){
 		}
 	}
 	free(nodo); //Se libera la direccion del nodo buscado para eliminar
+}
+
+int main(int argc, char const *argv[]) {
+	ListaSimple listaSimple;
+
+	Nave *nave1 = (Nave*) malloc(sizeof(Nave));
+	nave1-> poder = 5;
+	nave1-> vida = 100;
+	nave1-> team = 1;
+
+	Nave *nave2 = (Nave*) malloc(sizeof(Nave));
+	nave2-> poder = 7;
+	nave2-> vida = 200;
+	nave2-> team = 2;
+
+	inicializaLista(&listaSimple);
+
+	addJupa(&listaSimple, nave1);
+	addJupa(&listaSimple, nave2);
+
+
+	return 0;
 }
