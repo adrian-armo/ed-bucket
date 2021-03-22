@@ -10,7 +10,7 @@ typedef struct _nodo {
 typedef struct _nave {
 	unsigned int poder;
 	unsigned int vida;
-	unsigned char team;
+	unsigned int team;
 } Nave;
 
 
@@ -49,4 +49,28 @@ void addCola(ListaSimple *lista, void *data){
 		lista-> cola-> sigt = nodo; //Si no esta vacia se agrega al final
 	}
 	lista-> cola = nodo; //La nueva cola es el nuevo nodo
+}
+
+void eliminaNodo(ListaSimple *lista, Nodo *nodo){
+	if (nodo == lista-> jupa){ //Maneja cuando el nodo a eliminar es 1er
+		if (lista-> jupa-> sigt == NULL) { //Si el primer nodo es el unico
+			lista-> jupa = lista-> cola = NULL; //Reasiga a NULL los nodos de la lista
+		} else { //Si el nodo no es unico
+			lista-> jupa = lsita-> jupa-> sigt; //se asigna el 1er al sigt nodo en lista
+		}
+	} else { //Se recorre la lista
+		Nodo *temp = lista-> jupa; //Usando un puntero temporal
+		//Termina si temp es asignado a NULL, lo que indica que el elemento no esta
+		while (temp != NULL && temp-> sigt != nodo) {
+			temp = temp-> sigt; //Avanza
+		}
+		if (temp != NULL) {
+			temp-> sigt = nodo-> sigt; //Se obtiene el nodo siguiente al eliminar
+			//temp conserva la direccion al nodo anterior al eliminar,
+			//nodo conserva la direccion del nodo a eliminar
+			//se reasigna desde la dir del nodo anterior, la dir del nodo subsecuente
+			//de esta manera se "brinca" el nodo a eliminar
+		}
+	}
+	free(nodo); //Se libera la direccion del nodo buscado para eliminar
 }
