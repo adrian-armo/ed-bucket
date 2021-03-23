@@ -7,7 +7,7 @@ void addJupa(ListaSimple*, void*);  //Listo
 
 void addCola(ListaSimple*, void*);  //Listo
 
-void eliminar(ListaSimple*, Nodo*); //
+void eliminar(ListaSimple*, Nodo*); //LISTO
 
 Nodo *obtenerNodo(ListaSimple*, COMPARE, void*);  //
 
