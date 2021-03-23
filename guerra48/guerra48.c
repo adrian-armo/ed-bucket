@@ -75,6 +75,18 @@ void eliminaNodo(ListaSimple *lista, Nodo *nodo){
 	free(nodo); //Se libera la direccion del nodo buscado para eliminar
 }
 
+//Imprime una lista del campo de dato ingresado como parámetro
+void imprimirLista(ListaSimple *lista, void *data) {
+    if (lista-> jupa == NULL) { //Si la lista está vacía
+        printf("La lista ingresada está vacia.");
+    } else {
+        Nodo *temp = lista-> jupa; //Temp para recorrido de la lista
+        while(temp != NULL) {
+            printf("%d "; temp-> data);
+        }
+    }
+}
+
 int main(int argc, char const *argv[]) {
 	ListaSimple listaSimple;
 
@@ -92,7 +104,6 @@ int main(int argc, char const *argv[]) {
 
 	addJupa(&listaSimple, nave1);
 	addJupa(&listaSimple, nave2);
-
 
 	return 0;
 }
