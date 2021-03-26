@@ -193,16 +193,35 @@ ListaSimple inicia_guerra(int nivel) {
 }
 
 void disparar(ListaSimple *lista, int posicion){
+	if (posicion > 6) {
+		printf("Seleccione una posicion valida!");
+		return;
+	}
+
 	lista-> actual = lista-> jupa;
 
 	int contador = 1;
-	while (contador < posicion-1) {
+	while (contador < posicion-1) { //&& posicion < 7 && posicion > 1
 		lista-> actual = lista-> actual -> sigt;
 		contador++;
 	}
-	int poder = lista-> actual -> sigt -> poder;
-	lista-> actual-> vida = lista-> actual-> vida - poder; //resta a la izq
-	lista-> actual -> sigt-> sigt-> vida = lista-> actual-> sigt -> sigt-> vida - poder; //resta a la izq
+	int poder = 0;
+
+	if (posicion < 2) {
+		poder = lista-> actual -> poder;
+		lista-> actual-> sigt -> vida = lista-> actual-> sigt -> vida - poder; //resta a la izq
+	}
+
+	if (posicion > 5) {
+		poder = lista-> actual -> sigt -> poder;
+		lista-> actual-> vida = lista-> actual-> vida - poder; //resta a la izq
+	}
+
+	if (posicion > 1 && posicion < 6) { //Si se ingresa mayor a 6 colapsa porque aun no se valida
+		poder = lista-> actual -> sigt -> poder;
+		lista-> actual-> vida = lista-> actual-> vida - poder; //resta a la izq
+		lista-> actual -> sigt-> sigt-> vida = lista-> actual-> sigt -> sigt-> vida - poder; //resta a la izq
+	}
 }
 
 
