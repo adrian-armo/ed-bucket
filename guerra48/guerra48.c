@@ -201,13 +201,8 @@ void disparar(ListaSimple *lista, int posicion){
 		contador++;
 	}
 	int poder = lista-> actual -> sigt -> poder;
-	if (posicion > 1) {
-		lista-> actual-> vida = lista-> actual-> vida - poder; //resta a la izq
-	}
-	if (posicion < 6) {
-		lista-> actual -> sigt-> sigt-> vida = lista-> actual-> sigt -> sigt-> vida - poder; //resta a la izq
-	}
-
+	lista-> actual-> vida = lista-> actual-> vida - poder; //resta a la izq
+	lista-> actual -> sigt-> sigt-> vida = lista-> actual-> sigt -> sigt-> vida - poder; //resta a la izq
 }
 
 
