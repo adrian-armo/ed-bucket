@@ -1,5 +1,68 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+
+/*
+ * Instituto Tecnológico de Costa Rica
+ * Estructuras de Datos
+ * Profesor: Aurelio Sanabria
+ * Estudiante: Adrian Araya Morera
+ * Tarea Corta 4
+ *
+ * Para compilar se utilizó gcc -g guerra49.c -o guerra48
+ * Para ejecutar ./guerra48
+ *
+ * De momento no se utiliza makefile
+ * Última modificación: 25 marzo 2021
+ */
+
+// Funcion abreviada para limpiar las impresiones anteriores en la terminal
+void clrscr() {
+    system("@cls||clear");
+}
+
+/*  Funcion que imprime las opciones del juego en la terminal
+*   Retorna un valor entero entre 1 y 4 para ser utilizado en un switch-main
+*   Maneja validaciones para las opciones invalidas ingresadas por el usuario
+*/
+int menu(){
+
+    printf("\n%s\n", "GUERRA DEL 48 | Todos contra todos\n" );
+    printf("\t%s\n", "1. Iniciar << Declarar la guerra >>" );
+    printf("\t%s\n", "2. Acuerdo de paz");
+
+    int seleccion = 0;
+    scanf("%d", &seleccion);
+
+    while (seleccion < 1 || seleccion > 3) {
+        printf("\n%s\n%s\n", "ERROR!   Opción fuera de parámetros.",
+                                 "Por favor ingrese una opción válida.");
+        scanf("%d", &seleccion);
+    }
+
+    if (seleccion == 2){
+			printf("%s\n", "Se ha llegado a un acuerdo de paz y la guerra terminara en 3 segundos.");
+			sleep(4);   // relentiza el inicio del juego para poder leer el mensaje de feedback
+			return 0;
+		}
+
+    printf("\nUsted ha seleccionado satisfactoriamente la opción: %d\n\n", seleccion);
+    printf("%s\n", "-------- El juego iniciará en pocos segundos --------"); // feedback
+
+    sleep(4);   // relentiza el inicio del juego para poder leer el mensaje de feedback
+    clrscr();   // limpia la terminal
+
+    return seleccion;
+}
+
+
+/*  Retorna un entero en el rango [0, maximo]
+*   Recibe como parametro un entero maximo (inclusive)
+*/
+int int_random(int maximo) {
+    return rand()%(maximo+1);
+}
 
 
 typedef struct _nodo {
@@ -54,7 +117,7 @@ void addCola(ListaSimple *lista, int poder, int vida, int team){
 }
 */
 
-void eliminaNodo(ListaSimple *lista, Nodo *nodo){
+void eliminaNodo(ListaSimple *lista, Nodo *nodo){ //para aplicar aritmetica *
 	if (nodo == lista-> jupa){ //Maneja cuando el nodo a eliminar es 1er
 		if (lista-> jupa-> sigt == NULL) { //Si el primer nodo es el unico
 			lista-> jupa = lista-> cola = NULL; //Reasiga a NULL los nodos de la lista
@@ -86,10 +149,10 @@ void imprimirLista(ListaSimple *lista, int valor) {
 			Nodo *temp = lista-> jupa; //Temp para recorrido de la lista
 			while(temp != NULL) {
 				if (valor == 1) {
-					printf("%0*d ", 2, temp-> poder);
+					printf("%0*d ", 2, temp-> vida);
 				}
 				if (valor == 2) {
-					printf("%0*d ", 2, temp-> vida);
+					printf("%0*d ", 2, temp-> poder);
 				}
 				if (valor == 3) {
 					printf("%c  ", temp-> team);
@@ -100,20 +163,89 @@ void imprimirLista(ListaSimple *lista, int valor) {
     }
 }
 
+void imprimeTablero(ListaSimple lista){
+	printf("\n");
+	printf("Vida\t: ");
+	imprimirLista(&lista, 1);
+	printf("Poder\t: ");
+	imprimirLista(&lista, 2);
+	printf("Team\t: ");
+	imprimirLista(&lista, 3);
+}
 
-int main(int argc, char const *argv[]) {
+ListaSimple inicia_guerra(int nivel) {
 	ListaSimple listaSimple;
-
 	inicializaLista(&listaSimple);
 
-	addJupa(&listaSimple, 10, 5, 'X');
-	addJupa(&listaSimple, 15, 30, 'Z');
-	addJupa(&listaSimple, 12, 5, 'X');
-	addJupa(&listaSimple, 17, 34, 'Z');
+	int max_naves = 6;
+	for (size_t i = 0; i < max_naves; i++) {
 
-	imprimirLista(&listaSimple, 1);
-	imprimirLista(&listaSimple, 2);
-	imprimirLista(&listaSimple, 3);
+		int ran_poder = int_random(nivel); //El nivel se pide entre 1 y 10
+		int ran_vida = int_random(nivel);
+
+		if (i % 2 == 0) {
+			addJupa(&listaSimple, ran_poder/2, ran_vida, 'X');
+		} else {
+			addJupa(&listaSimple, ran_poder/2, ran_vida, 'Z');
+		}
+	}
+	return listaSimple;
+}
+
+void disparar(ListaSimple *lista, int posicion){
+	lista-> actual = lista-> jupa;
+
+	int contador = 1;
+	while (contador < posicion-1) {
+		lista-> actual = lista-> actual -> sigt;
+		contador++;
+	}
+	int poder = lista-> actual -> sigt -> poder;
+	if (posicion > 1) {
+		lista-> actual-> vida = lista-> actual-> vida - poder; //resta a la izq
+	}
+	if (posicion < 6) {
+		lista-> actual -> sigt-> sigt-> vida = lista-> actual-> sigt -> sigt-> vida - poder; //resta a la izq
+	}
+
+}
+
+
+
+int main(int argc, char const *argv[]) {
+
+	srand(time(NULL));
+
+	int entrada = menu(); // optiene la entrada del usuario
+	int nivel = 0;
+	int carreta = 0;
+
+	switch(entrada) {
+		case 1:
+				printf("%s\n", "Ingrese el nivel del juego entre 1 y 99: ");
+				scanf("%d", &nivel);
+
+				ListaSimple listaSimple;
+				listaSimple = inicia_guerra(nivel);
+				imprimeTablero(listaSimple);
+
+				printf("%s\n", "Jugador Z seleccione cual carreta desea dispara 1, 3 o 5 ");
+				scanf("%d", &carreta);
+
+				disparar(&listaSimple, carreta);
+				imprimeTablero(listaSimple);
+
+				break;
+
+		case 2:
+				printf("%s\n", "Se ha llegado a un acuerdo de paz y la guerra terminara en 3 segundos.");
+				sleep(4);   // relentiza el inicio del juego para poder leer el mensaje de feedback
+
+				break;
+
+	} //cierra el switch
+
+
 
 	return 0;
 }
